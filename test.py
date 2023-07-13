@@ -1,28 +1,35 @@
-import BlynkLib
-import RPi.GPIO as GPIO
-from BlynkTimer import BlynkTimer
+import sys
 
 
-device = 25
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(device, GPIO.OUT)
-GPIO.output(device, GPIO.LOW)
+def bellman(graph, src):
+    V = len(graph)
+    dist = [sys.maxsize] * V
+    dist[src] = 0
 
-blynk = BlynkLib.Blynk("api key")
+    for i in range(V - 1):
+        for u in range(V):
+            for v in range(V):
+                if graph[u][v] != 0:
+                    dist[v] = min(dist[v], dist[u] + graph[u][v])
 
-@blynk.on("V0")
-def v0_write_handler(value):
-
-    if int(value[0]) is not 0:
-        GPIO.output(device, GPIO.HIGH)
-    
-    else:
-        GPIO.output(device, GPIO.LOW)
+    return dist
 
 
-@blynk.on("connected")
-def blynk_connected():
-    print("Conn")
+graph = [
+    [0, 4, 0, 0, 0, 0, 0, 8, 0],
+    [4, 0, 8, 0, 0, 0, 0, 11, 0],
+    [0, 8, 0, 7, 0, 4, 0, 0, 2],
+    [0, 0, 7, 0, 9, 14, 0, 0, 0],
+    [0, 0, 0, 9, 0, 10, 0, 0, 0],
+    [0, 0, 4, 14, 10, 0, 2, 0, 0],
+    [0, 0, 0, 0, 0, 2, 0, 1, 6],
+    [8, 11, 0, 0, 0, 0, 1, 0, 7],
+    [0, 0, 2, 0, 0, 0, 6, 7, 0],
+]
 
-while 1:
-    blynk.run()
+src = 0
+
+distances = bellman(graph, src)
+
+for i, dist in enumerate(distances):
+    print("Vertex", i, ": ", dist)
