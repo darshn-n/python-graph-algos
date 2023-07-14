@@ -4,29 +4,29 @@ import sys
 def prim(graph, V):
     mst = []
     visited = [False] * V
-    key = [sys.maxsize] * V
+    dist = [sys.maxsize] * V
 
-    key[0] = 0
+    dist[0] = 0
 
     for _ in range(V):
-        u = min_key(key, visited)
+        u = min_key(dist, visited)
         visited[u] = True
 
         for v in range(V):
-            if graph[u][v] > 0 and not visited[v] and graph[u][v] < key[v]:
-                key[v] = graph[u][v]
+            if graph[u][v] > 0 and not visited[v] and graph[u][v] < dist[v]:
+                dist[v] = graph[u][v]
                 mst.append((u, v))
 
     return mst
 
 
-def min_key(key, visited):
-    min_val = sys.maxsize
+def min_key(dist, visited):
+    min_dist = sys.maxsize
     min_index = -1
 
-    for v in range(len(key)):
-        if not visited[v] and key[v] < min_val:
-            min_val = key[v]
+    for v in range(len(dist)):
+        if not visited[v] and dist[v] < min_dist:
+            min_dist = dist[v]
             min_index = v
 
     return min_index

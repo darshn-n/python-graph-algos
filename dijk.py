@@ -19,10 +19,11 @@ def dijkstra(graph, source):
 
 
 def min_distance(dist, visited):
+    V = len(dist)
     min_dist = sys.maxsize
     min_index = -1
 
-    for v in range(len(dist)):
+    for v in range(V):
         if dist[v] < min_dist and not visited[v]:
             min_dist = dist[v]
             min_index = v
